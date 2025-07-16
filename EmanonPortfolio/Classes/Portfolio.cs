@@ -29,11 +29,16 @@ namespace Emanon_Portfolio.Classes
         {
             get
             {
-                /* ik weet niet echt hoe ik dit in code moet omzetten, maar kijk hoevel transacties in de lijst staan
-                 * en tel de NumberShares van elke transactie bij elkaar op. */
+                // totalShares: totale aantal aandelen
+                int totalShares = 0;
 
-                #warning Implementeer dit kenmerk
-                return 0;
+                /* tel van elke transactie de waarde bij het totale aantal aandelen tot de laatste transactie
+                 * en geef de waarde van totalShares terug */
+                for (int i = 0; i < Transactions.Count(); i++)
+                {
+                    totalShares += Transactions[i].NumberShares;
+                }
+                return totalShares;
             }
         }
 
@@ -47,8 +52,21 @@ namespace Emanon_Portfolio.Classes
         // ---------------------------------------------------------------------------------------------------
         public decimal TotalValue(int? pNumberDecimals = 2)
         {
-            #warning Implementeer deze methode
-            return 0m;
+            // totalAmount: totale waarde van alle aandelen
+            decimal totalAmount = 0;
+
+            /* voor elke transactie tel de waarde van de transactie (aantal aandelen * waarde ervan) erbij op
+             * rond deze waarde af op het einde indien pNumberDecimals een waarde heeft
+             * en geef deze waarde terug */
+            for (int i = 0; i < Transactions.Count(); i++)
+            {
+                totalAmount += Transactions[i].NumberShares * Transactions[i].SharesRate;
+            }
+            if (pNumberDecimals.HasValue)
+            {
+                totalAmount = Math.Round(totalAmount, pNumberDecimals.Value);
+            }
+            return totalAmount;
         }
 
 
@@ -62,8 +80,30 @@ namespace Emanon_Portfolio.Classes
         public int NumberOnDate(DateTime pSelectionDate
                               , List<Constants.ShareType>? pShareTypes = null)
         {
-            #warning Implementeer deze methode
-            return 0;
+            // totalShares: totale aantal aandelen
+            int totalShares = 0;
+
+            /* voor elke transactie voor de geselecteerde datum van de unittest
+             * tel van elke transactie de waarde bij het totale aantal aandelen tot de laatste transactie
+             * en geef de waarde van totalShares terug */
+            for (int i = 0; i < Transactions.Count(); i++)
+            {
+                if (pShareTypes != null && Transactions[i].TransactionDate <= pSelectionDate)
+                {
+                    if (pShareTypes.Contains(Transactions[i].ShareType))
+                    {
+                        totalShares += Transactions[i].NumberShares;
+                    }
+                }
+                else
+                {
+                    if (Transactions[i].TransactionDate <= pSelectionDate)
+                    {
+                        totalShares += Transactions[i].NumberShares;
+                    }
+                }
+            }
+            return totalShares;
         }
 
 
@@ -80,8 +120,32 @@ namespace Emanon_Portfolio.Classes
                                  , int? pNumberDecimals = 2
                                  , List<Constants.ShareType>? pShareTypes = null)
         {
-            #warning Implementeer deze methode
-            return 0m;
+            // totalAmount: totale waarde van de aandelen
+            decimal totalAmount = 0;
+
+            /* voor elke transactie voor de geselecteerde datum van de unittest
+             * tel de waarde van de transactie (aantal aandelen * waarde ervan) bij de totalAmount op
+             * rond deze waarde af op het einde indien pNumberDecimals een waarde heeft
+             * en geef deze waarde terug */
+            for (int i = 0; i < Transactions.Count(); i++)
+            {
+                if (pShareTypes != null && Transactions[i].TransactionDate <= pSelectionDate)
+                {
+                    if (pShareTypes.Contains(Transactions[i].ShareType))
+                    {
+                        totalAmount += Transactions[i].NumberShares * Transactions[i].SharesRate;
+                    }
+                }
+                else if (Transactions[i].TransactionDate <= pSelectionDate)
+                {
+                    totalAmount += Transactions[i].NumberShares * Transactions[i].SharesRate;
+                }
+            }
+            if (pNumberDecimals.HasValue)
+            {
+                totalAmount = Math.Round(totalAmount, pNumberDecimals.Value);
+            }
+            return totalAmount;
         }
         #endregion
 

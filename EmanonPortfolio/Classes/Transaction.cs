@@ -51,13 +51,12 @@ namespace Emanon_Portfolio.Classes
         // ---------------------------------------------------------------------------------------------------
         public decimal Amount(int? pNumberDecimals = 2)
         {
-            // total: totale waarde van de transactie
+            // totalValue: totale waarde van de transactie
             decimal totalValue = NumberShares * SharesRate;
 
             /* controleer of pNumberDecimals een value heeft
              * zo ja, geef de totalValue terug afgerond op het gegeven aantal decimalen
              * zo nee, geef de totalValue terug zoals normaal */
-
             if (pNumberDecimals.HasValue)
             {
                 return Math.Round(totalValue, pNumberDecimals.Value);
